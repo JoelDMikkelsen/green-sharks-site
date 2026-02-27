@@ -72,10 +72,13 @@ exports.handler = async function (event) {
       // Netlify will run our secondary background function concurrently using its URL.
       // Easiest cross-function trigger: HTTP POST to our own background function endpoint.
 
+      // Depending on local dev vs production. Netlify's host header can sometimes be weird.
+      // If deployed, we should preferably use the clean green-sharks.com URL or the raw host.
       const host = event.headers.host;
-      // Depending on local dev vs production
       const protocol = host.includes('localhost') ? 'http' : 'https';
-      const backgroundUrl = `${protocol}://${host}/.netlify/functions/discord-interaction-background`;
+      // Fallback to the production domain if host is missing for some reason
+      const siteUrl = host ? `${protocol}://${host}` : 'https://green-sharks.com';
+      const backgroundUrl = `${siteUrl}/.netlify/functions/discord-interaction-background`;
 
       // Dispatch the heavy lifting to the background function.
       // We must AWAIT this fetch just long enough for the network request to leave the Netlify container,
@@ -92,11 +95,16 @@ exports.handler = async function (event) {
         console.error("Error triggering background function:", err);
       }
 
-      // 4. Respond to Discord IMMEDIATELY: Type 6 (DEFERRED_UPDATE_MESSAGE)
+      // 4. Respond to Discord IMMEDIATELY: Type 7 (UPDATE_MESSAGE)
+      // This edits the message instantly to a "loading" state, fully satisfying the 3-second rule.
       return {
         statusCode: 200,
         body: JSON.stringify({
-          type: 6 // Acknowledge button click and wait for followup
+          type: 7,
+          data: {
+            content: `⏳ **Processing...** Please wait while ${adminName}'s approval is committed to GitHub.`,
+            components: [] // Removes the button immediately so no one else can click it
+          }
         })
       };
     }

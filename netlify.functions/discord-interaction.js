@@ -52,6 +52,8 @@ exports.handler = async function (event) {
   // 3. Handle Message Component Interactions (Button clicks)
   if (payload.type === 3) {
     const customId = payload.data.custom_id;
+    const member = payload.member;
+    const adminName = member && member.user ? (member.nick || member.user.username) : 'An Admin';
 
     if (customId.startsWith('approve_highlight:')) {
       const appId = process.env.DISCORD_APP_ID;

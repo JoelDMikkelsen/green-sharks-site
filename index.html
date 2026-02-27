@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Green Sharks | Tactical PvE Operations</title>
+  <meta name="description" content="Green Sharks is an international Arma community running structured Vietnam, WW2, Modern and Zeus-guided operations across Australian and US server clusters. No fees.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* =====================
+       RESET & VARIABLES
+    ===================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-base:       #060f0a;
+      --bg-surface:    #091508;
+      --bg-card:       #0c1c0e;
+      --bg-card-alt:   #101f12;
+
+      --green-dim:     #1a4225;
+      --green-mid:     #275c37;
+      --green-bright:  #368f4e;
+      --green-light:   #4db868;
+      --green-pale:    #6ed086;
+
+      --gold:          #c9a84c;
+      --gold-light:    #e2c16b;
+
+      --text-primary:  #d2e8d4;
+      --text-secondary:#7fa882;
+      --text-muted:    #4d6b50;
+
+      --border:        #162c1a;
+      --border-bright: #275c37;
+
+      --nav-height:    62px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+    }
+
+    /* =====================
+       TYPOGRAPHY
+    ===================== */
+    h1, h2, h3, h4, h5 {
+      font-family: 'Rajdhani', system-ui, sans-serif;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    h1 { font-size: clamp(2.2rem, 6vw, 4.4rem); font-weight: 700; line-height: 1.08; }
+    h2 { font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 600; }
+    h3 { font-size: clamp(1rem, 2.5vw, 1.2rem); font-weight: 600; }
+    h4 { font-size: 0.9rem; font-weight: 600; }
+    p  { margin-bottom: 0.75rem; }
+    a  { color: var(--green-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--green-pale); }
+
+    /* =====================
+       LAYOUT
+    ===================== */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+    section { padding: 80px 0; }
+    section:nth-child(even) { background-color: var(--bg-surface); }
+
+    [id] { scroll-margin-top: calc(var(--nav-height) + 16px); }
+
+    .section-header {
+      margin-bottom: 2.75rem;
+      padding-left: 1.25rem;
+      border-left: 3px solid var(--green-bright);
+    }
+    .section-header h2 { color: var(--green-light); margin-bottom: 0.3rem; }
+    .section-header p  { color: var(--text-secondary); font-size: 0.93rem; margin: 0; }
+
+    /* =====================
+       NAVIGATION
+    ===================== */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      height: var(--nav-height);
+      background: rgba(6, 15, 10, 0.96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 100%; padding: 0 1.5rem;
+      max-width: 1240px; margin: 0 auto;
+    }
+    .nav-logo {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.25rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--green-light);
+      display: flex; align-items: center; gap: 0.15rem;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 0.1rem; list-style: none; }
+    .nav-links a {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.09em; text-transform: uppercase;
+      color: var(--text-secondary);
+      padding: 0.4rem 0.65rem; border-radius: 3px;
+      transition: color 0.2s, background-color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--green-light); background-color: var(--bg-card);
+    }
+    .nav-cta {
+      background-color: var(--green-mid) !important;
+      color: var(--text-primary) !important;
+      border: 1px solid var(--green-bright);
+      margin-left: 0.4rem;
+    }
+    .nav-cta:hover { background-color: var(--green-bright) !important; color: #fff !important; }
+
+    .hamburger {
+      display: none; flex-direction: column; cursor: pointer;
+      gap: 5px; padding: 4px; background: none; border: none;
+    }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--text-secondary); transition: 0.3s; }
+
+    .mobile-menu {
+      display: none; position: fixed;
+      top: var(--nav-height); left: 0; right: 0;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      z-index: 999; padding: 0.5rem;
+    }
+    .mobile-menu.open { display: block; }
+    .mobile-menu a {
+      display: block;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.95rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-secondary);
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--green-light); }
+
+    /* =====================
+       BUTTONS
+    ===================== */
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.92rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0.7rem 1.75rem;
+      border-radius: 3px; border: 2px solid transparent;
+      cursor: pointer; transition: all 0.2s; text-decoration: none;
+    }
+    .btn-primary { background-color: var(--green-bright); color: #fff; border-color: var(--green-bright); }
+    .btn-primary:hover { background-color: var(--green-light); border-color: var(--green-light); color: #fff; }
+    .btn-secondary { background-color: transparent; color: var(--text-primary); border-color: var(--border-bright); }
+    .btn-secondary:hover { background-color: var(--bg-card); border-color: var(--green-bright); color: var(--green-light); }
+
+    /* =====================
+       HERO
+    ===================== */
+    #home {
+      min-height: 100vh; display: flex; align-items: center;
+      padding-top: var(--nav-height);
+      background-color: var(--bg-base);
+      background-image:
+        radial-gradient(ellipse at 65% 45%, rgba(54, 143, 78, 0.08) 0%, transparent 55%),
+        linear-gradient(160deg, var(--bg-base) 0%, #030a05 100%);
+      position: relative; overflow: hidden;
+    }
+    #home::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(22, 44, 26, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(22, 44, 26, 0.1) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-tag {
+      display: inline-block;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--green-bright);
+      border: 1px solid var(--green-bright);
+      padding: 0.25rem 0.8rem; border-radius: 2px;
+      margin-bottom: 1.5rem;
+    }
+    .hero-headline { color: #fff; margin-bottom: 1.25rem; }
+    .hero-headline .hl { color: var(--green-light); }
+    .hero-sub {
+      font-size: 1.02rem; color: var(--text-secondary);
+      margin-bottom: 2.5rem; max-width: 560px; line-height: 1.75;
+    }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    /* Game mode cards */
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.1rem; margin-top: 3.5rem;
+    }
+    .game-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--green-bright);
+      border-radius: 4px; padding: 1.5rem;
+      transition: border-top-color 0.2s, transform 0.2s;
+    }
+    .game-card:hover { border-top-color: var(--green-light); transform: translateY(-3px); }
+    .game-tag {
+      display: inline-block;
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      background: var(--green-dim); color: var(--green-pale);
+      padding: 0.15rem 0.5rem; border-radius: 2px;
+      margin-bottom: 0.65rem;
+    }
+    .game-card h3 { color: var(--text-primary); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    .game-card p  { font-size: 0.86rem; color: var(--text-secondary); line-height: 1.6; margin: 0; }
+
+    /* Philosophy strip */
+    .philosophy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 0.75rem; margin-top: 2.5rem;
+    }
+    .philosophy-item {
+      display: flex; align-items: center; gap: 0.65rem;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 3px; padding: 0.75rem 1rem;
+    }
+    .philosophy-item::before { content: '◆'; color: var(--green-bright); font-size: 0.6rem; flex-shrink: 0; }
+    .philosophy-item span { font-size: 0.87rem; color: var(--text-secondary); }
+
+    /* =====================
+       SERVERS
+    ===================== */
+    .cluster-label {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+      margin-top: 2.5rem; margin-bottom: 1.25rem;
+    }
+    .cluster-label:first-of-type { margin-top: 0; }
+
+    .server-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1.1rem;
+    }
+    .server-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 4px; padding: 1.4rem;
+      position: relative;
+    }
+    .server-card h3 { font-size: 0.88rem; color: var(--text-primary); line-height: 1.4; margin-bottom: 1rem; padding-right: 3rem; }
+    .server-badge {
+      position: absolute; top: 1.25rem; right: 1.25rem;
+      font-size: 0.62rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      background: var(--green-dim); color: var(--green-pale);
+      padding: 0.2rem 0.5rem; border-radius: 2px;
+    }
+    .server-row {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-size: 0.82rem; color: var(--text-secondary);
+      margin-bottom: 0.35rem;
+    }
+    .server-row strong {
+      color: var(--text-muted); font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      width: 38px; flex-shrink: 0;
+    }
+    .ip { font-family: 'Courier New', monospace; color: var(--green-light); font-size: 0.85rem; }
+    .server-link {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      margin-top: 0.9rem;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--green-bright);
+      border: 1px solid var(--green-dim); border-radius: 2px;
+      padding: 0.3rem 0.75rem; transition: all 0.2s;
+    }
+    .server-link:hover { border-color: var(--green-bright); color: var(--green-light); background: var(--bg-card-alt); }
+    .server-tbc { color: var(--text-muted); font-style: italic; font-size: 0.88rem; }
+    .connect-note {
+      margin-top: 2rem; padding: 1.1rem 1.4rem;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-left: 3px solid var(--gold); border-radius: 3px;
+      font-size: 0.86rem; color: var(--text-secondary);
+    }
+    .connect-note strong { color: var(--gold); display: block; margin-bottom: 0.3rem; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; }
+
+    /* =====================
+       HOW TO JOIN
+    ===================== */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      counter-reset: steps;
+    }
+    .step-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 4px; padding: 1.75rem 1.5rem;
+      position: relative; counter-increment: steps;
+    }
+    .step-card::before {
+      content: counter(steps, decimal-leading-zero);
+      position: absolute; top: 1.25rem; right: 1.25rem;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 2.2rem; font-weight: 700;
+      color: var(--green-dim); line-height: 1;
+    }
+    .step-card h3 { color: var(--green-light); margin-bottom: 0.75rem; font-size: 0.98rem; }
+    .step-card p, .step-card ol, .step-card ul {
+      font-size: 0.86rem; color: var(--text-secondary); line-height: 1.7;
+    }
+    .step-card ol, .step-card ul { padding-left: 1.1rem; }
+    .step-card li { margin-bottom: 0.25rem; }
+    .step-cta {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      margin-top: 1rem;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.82rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      color: #fff; background: var(--green-mid);
+      border: 1px solid var(--green-bright); border-radius: 2px;
+      padding: 0.4rem 0.9rem; transition: background 0.2s; text-decoration: none;
+    }
+    .step-cta:hover { background: var(--green-bright); color: #fff; }
+
+    /* =====================
+       MODS & SETUP
+    ===================== */
+    .mods-tabs {
+      display: flex; border-bottom: 1px solid var(--border);
+      margin-bottom: 1.75rem;
+    }
+    .mods-tab {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.82rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-muted); padding: 0.6rem 1.25rem;
+      cursor: pointer; border-bottom: 2px solid transparent;
+      margin-bottom: -1px; transition: color 0.2s, border-color 0.2s;
+    }
+    .mods-tab.active { color: var(--green-light); border-bottom-color: var(--green-bright); }
+    .mods-tab:hover { color: var(--text-secondary); }
+
+    .mods-panel { display: none; }
+    .mods-panel.active { display: block; }
+
+    .mods-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 0.45rem; list-style: none;
+    }
+    .mods-list li a {
+      display: flex; align-items: center; gap: 0.6rem;
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 3px;
+      padding: 0.55rem 0.9rem;
+      color: var(--text-secondary); font-size: 0.86rem;
+      transition: all 0.2s;
+    }
+    .mods-list li a:hover { border-color: var(--green-bright); color: var(--green-light); background: var(--bg-card-alt); }
+    .mods-list li a::before { content: '→'; color: var(--green-bright); flex-shrink: 0; font-size: 0.78rem; }
+
+    .mods-note {
+      margin-top: 1.75rem; padding: 1.25rem 1.5rem;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-left: 3px solid var(--gold); border-radius: 3px;
+      font-size: 0.86rem; color: var(--text-secondary);
+    }
+    .mods-note h4 { color: var(--gold); margin-bottom: 0.5rem; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .mods-note ul { padding-left: 1.1rem; }
+    .mods-note li { margin-bottom: 0.3rem; }
+
+    /* =====================
+       OPERATIONS
+    ===================== */
+    .ops-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+    .ops-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 4px; padding: 1.65rem;
+    }
+    .ops-card h3 {
+      color: var(--gold); margin-bottom: 1rem; font-size: 0.95rem;
+      border-bottom: 1px solid var(--border); padding-bottom: 0.7rem;
+    }
+    .ops-card ul { list-style: none; padding: 0; }
+    .ops-card ul li {
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      padding: 0.35rem 0; font-size: 0.86rem; color: var(--text-secondary);
+      border-bottom: 1px solid rgba(22, 44, 26, 0.5);
+    }
+    .ops-card ul li:last-child { border-bottom: none; }
+    .ops-card ul li::before { content: '▸'; color: var(--green-bright); flex-shrink: 0; font-size: 0.72rem; margin-top: 0.18rem; }
+
+    .cas-warning {
+      background: rgba(201, 168, 76, 0.07);
+      border: 1px solid rgba(201, 168, 76, 0.25);
+      border-radius: 3px; padding: 0.7rem 0.9rem;
+      margin-bottom: 0.9rem; font-size: 0.8rem; color: var(--gold-light);
+    }
+    .strike-table { width: 100%; border-collapse: collapse; font-size: 0.81rem; margin-top: 0.75rem; }
+    .strike-table th {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.7rem;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-muted); text-align: left;
+      padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--border);
+    }
+    .strike-table td {
+      padding: 0.35rem 0.5rem; color: var(--text-secondary);
+      border-bottom: 1px solid rgba(22, 44, 26, 0.35);
+    }
+    .strike-table td:last-child { color: var(--green-light); font-weight: 500; }
+
+    /* =====================
+       RULES
+    ===================== */
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+    .rules-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 4px; padding: 1.65rem;
+    }
+    .rules-card h3 {
+      color: var(--green-light); margin-bottom: 0.9rem; font-size: 0.95rem;
+      padding-bottom: 0.6rem; border-bottom: 1px solid var(--border);
+    }
+    .rules-card ul { list-style: none; padding: 0; }
+    .rules-card ul li {
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      padding: 0.3rem 0; font-size: 0.86rem; color: var(--text-secondary);
+    }
+    .rules-card ul li::before { content: '—'; color: var(--green-mid); flex-shrink: 0; }
+
+    /* =====================
+       COMMUNITY
+    ===================== */
+    .stat-strip { display: flex; gap: 2.5rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .stat-item { display: flex; flex-direction: column; }
+    .stat-value { font-family: 'Rajdhani', sans-serif; font-size: 1.9rem; font-weight: 700; color: var(--green-light); line-height: 1; }
+    .stat-label { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; color: var(--text-muted); margin-top: 0.2rem; }
+
+    .community-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    @media (max-width: 640px) { .community-layout { grid-template-columns: 1fr; } }
+
+    .values-list { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+    .values-list li {
+      display: flex; align-items: center; gap: 0.6rem;
+      font-size: 0.86rem; color: var(--text-secondary);
+      padding: 0.5rem 0.75rem;
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 3px;
+    }
+    .values-list li::before { content: '◆'; color: var(--green-bright); font-size: 0.55rem; flex-shrink: 0; }
+    @media (max-width: 480px) { .values-list { grid-template-columns: 1fr; } }
+
+    /* =====================
+       MEDIA
+    ===================== */
+    .media-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem; }
+    @media (max-width: 700px) { .media-grid { grid-template-columns: 1fr; } }
+    .media-side { display: flex; flex-direction: column; gap: 1.25rem; }
+
+    .media-placeholder {
+      background: var(--bg-card);
+      border: 1px dashed var(--border-bright);
+      border-radius: 4px; padding: 3rem 2rem;
+      text-align: center; color: var(--text-muted);
+      display: flex; flex-direction: column; justify-content: center;
+      min-height: 160px;
+    }
+    .media-placeholder h3 { color: var(--text-secondary); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    .media-placeholder p { font-size: 0.83rem; margin: 0; }
+
+    /* =====================
+       PARTNERS
+    ===================== */
+    .partners-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 4px; padding: 1.75rem;
+      color: var(--text-secondary); font-size: 0.88rem; max-width: 640px;
+    }
+
+    /* =====================
+       FAQ
+    ===================== */
+    .faq-list { display: flex; flex-direction: column; gap: 0.6rem; max-width: 780px; }
+    .faq-item {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 4px; overflow: hidden;
+    }
+    .faq-question {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.05rem 1.4rem; cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.98rem; font-weight: 600; letter-spacing: 0.04em;
+      color: var(--text-primary); transition: color 0.2s; user-select: none;
+    }
+    .faq-question:hover { color: var(--green-light); }
+    .faq-icon { font-size: 1.3rem; color: var(--green-bright); flex-shrink: 0; transition: transform 0.25s; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .faq-item.open .faq-answer { max-height: 200px; }
+    .faq-answer-inner { padding: 0 1.4rem 1.1rem; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7; }
+
+    /* =====================
+       FOOTER
+    ===================== */
+    footer {
+      background-color: var(--bg-surface);
+      border-top: 1px solid var(--border);
+      padding: 3rem 0 2rem;
+    }
+    .footer-inner {
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr;
+      gap: 2.5rem; margin-bottom: 2rem;
+    }
+    @media (max-width: 640px) { .footer-inner { grid-template-columns: 1fr; } }
+    .footer-brand h3 { font-size: 1.15rem; color: var(--green-light); margin-bottom: 0.5rem; }
+    .footer-brand p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; }
+    .footer-col h4 {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 0.9rem;
+    }
+    .footer-col ul { list-style: none; padding: 0; }
+    .footer-col ul li { margin-bottom: 0.4rem; }
+    .footer-col ul li a { font-size: 0.83rem; color: var(--text-secondary); }
+    .footer-col ul li a:hover { color: var(--green-light); }
+    .footer-bottom {
+      border-top: 1px solid var(--border); padding-top: 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.75rem;
+    }
+    .footer-bottom p { font-size: 0.76rem; color: var(--text-muted); margin: 0; }
+    .discord-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: #5865F2; color: #fff;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.83rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 0.5rem 1rem; border-radius: 3px; transition: background 0.2s;
+    }
+    .discord-btn:hover { background: #4752C4; color: #fff; }
+
+    /* =====================
+       RESPONSIVE
+    ===================== */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+    @media (max-width: 640px) {
+      section { padding: 60px 0; }
+      .steps-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- =====================
+     NAVIGATION
+===================== -->
+<nav>
+  <div class="nav-inner">
+    <a href="#home" class="nav-logo">Green<span>Sharks</span></a>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#servers">Servers</a></li>
+      <li><a href="#join">How To Join</a></li>
+      <li><a href="#mods">Mods</a></li>
+      <li><a href="#operations">Operations</a></li>
+      <li><a href="#rules">Rules</a></li>
+      <li><a href="#community">Community</a></li>
+      <li><a href="#media">Media</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="https://discord.gg/fWXqjJDRsA" target="_blank" rel="noopener" class="nav-cta">Discord</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#home"       onclick="closeMobile()">Home</a>
+  <a href="#servers"    onclick="closeMobile()">Servers</a>
+  <a href="#join"       onclick="closeMobile()">How To Join</a>
+  <a href="#mods"       onclick="closeMobile()">Mods</a>
+  <a href="#operations" onclick="closeMobile()">Operations</a>
+  <a href="#rules"      onclick="closeMobile()">Rules</a>
+  <a href="#community"  onclick="closeMobile()">Community</a>
+  <a href="#media"      onclick="closeMobile()">Media</a>
+  <a href="#faq"        onclick="closeMobile()">FAQ</a>
+  <a href="https://discord.gg/fWXqjJDRsA" target="_blank" rel="noopener">Join Discord →</a>
+</div>
+
+
+<!-- =====================
+     HOME / HERO
+===================== -->
+<section id="home">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-tag">International Arma Community · Est. July 2023</div>
+      <h1 class="hero-headline">
+        Tactical PvE<br>
+        <span class="hl">Operations.</span><br>
+        AU &amp; US. No Fees.
+      </h1>
+      <p class="hero-sub">
+        Green Sharks runs structured Vietnam, WW2, Modern and Zeus-guided operations across Australian and US server clusters. No contracts. No paywalls. Just good ops.
+      </p>
+      <div class="hero-actions">
+        <a href="https://discord.gg/fWXqjJDRsA" target="_blank" rel="noopener" class="btn btn-primary">Join Discord</a>
+        <a href="#servers" class="btn btn-secondary">View Servers</a>
+      </div>
+    </div>
+
+    <div class="game-grid">
+      <div class="game-card">
+        <div class="game-tag">Arma 3</div>
+        <h3>Vietnam Mike Force</h3>
+        <p>Large-scale PvE Vietnam operations using S.O.G. Prairie Fire and Unsung. Combined arms with structured CAS support and RTO coordination.</p>
+      </div>
+      <div class="game-card">
+        <div class="game-tag">Arma 3</div>
+        <h3>WW2 Mike Force</h3>
+        <p>Spearhead 1944-based WW2 operations with enhanced immersion mods. Coordinated squad play across the European theatre.</p>
+      </div>
+      <div class="game-card">
+        <div class="game-tag">Arma 3</div>
+        <h3>Zeus Operations</h3>
+        <p>Custom curated operations run by mission makers and admins. Structured, cooperative, and objective-based gameplay.</p>
+      </div>
+      <div class="game-card">
+        <div class="game-tag">Arma Reforger</div>
+        <h3>Modern &amp; Vietnam PvE</h3>
+        <p>Modern Conflict and Vietnam PvE across the AU/NZ cluster. New platform, same Green Sharks ethos.</p>
+      </div>
+    </div>
+
+    <div class="philosophy-grid">
+      <div class="philosophy-item"><span>No fees, ever</span></div>
+      <div class="philosophy-item"><span>Structured teamwork</span></div>
+      <div class="philosophy-item"><span>Clear roles &amp; doctrine</span></div>
+      <div class="philosophy-item"><span>International welcome</span></div>
+      <div class="philosophy-item"><span>Zeus-guided operations</span></div>
+      <div class="philosophy-item"><span>Play serious, stay real</span></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =====================
+     SERVERS
+===================== -->
+<section id="servers">
+  <div class="container">
+    <div class="section-header">
+      <h2>Servers</h2>
+      <p>Direct connect details and BattleMetrics links for all active clusters.</p>
+    </div>
+
+    <div class="cluster-label">AU Cluster — Arma 3</div>
+    <div class="server-grid">
+
+      <div class="server-card">
+        <span class="server-badge">PvE</span>
+        <h3>Green Sharks | Vietnam Mike Force | CAS &amp; S.O.G. Nickel Steel</h3>
+        <div class="server-row"><strong>Game</strong> Arma 3</div>
+        <div class="server-row"><strong>Mode</strong> Vietnam Mike Force</div>
+        <div class="server-row"><strong>IP</strong> <span class="ip">139.99.160.201</span></div>
+        <div class="server-row"><strong>Port</strong> <span class="ip">2487</span></div>
+      </div>
+
+      <div class="server-card">
+        <span class="server-badge">Joint Ops</span>
+        <h3>Vietnam Mike Force | Joint Operations — GS &amp; TFS | CAS</h3>
+        <div class="server-row"><strong>Game</strong> Arma 3</div>
+        <div class="server-row"><strong>Mode</strong> Joint Operations</div>
+        <div class="server-row"><strong>IP</strong> <span class="ip">162.220.13.77</span></div>
+        <div class="server-row"><strong>Port</strong> <span class="ip">2302</span></div>
+      </div>
+
+      <div class="server-card">
+        <span class="server-badge">PvE</span>
+        <h3>Green Sharks | WW2 Mike Force | Spearhead 1944</h3>
+        <div class="server-row"><strong>Game</strong> Arma 3</div>
+        <div class="server-row"><strong>Mode</strong> PvE WW2</div>
+        <div class="server-row"><strong>IP</strong> <span class="ip">67.211.208.155</span></div>
+        <div class="server-row"><strong>Port</strong> <span class="ip">2487</span></div>
+      </div>
+
+    </div>
+
+    <div class="cluster-label">AU/NZ Cluster — Arma Reforger</div>
+    <div class="server-grid">
+
+      <div class="server-card">
+        <span class="server-badge">PvE</span>
+        <h3>[AU/NZ] Green Sharks | Modern Conflict | PvE</h3>
+        <div class="server-row"><strong>Game</strong> Arma Reforger</div>
+        <div class="server-row"><strong>Mode</strong> Modern Conflict</div>
+        <a class="server-link" href="https://www.battlemetrics.com/servers/reforger/34925429" target="_blank" rel="noopener">BattleMetrics →</a>
+      </div>
+
+      <div class="server-card">
+        <span class="server-badge">PvE</span>
+        <h3>[AU/NZ] Green Sharks | Vietnam Conflict | PvE</h3>
+        <div class="server-row"><strong>Game</strong> Arma Reforger</div>
+        <div class="server-row"><strong>Mode</strong> Vietnam Conflict</div>
+        <a class="server-link" href="https://www.battlemetrics.com/servers/reforger/35450040" target="_blank" rel="noopener">BattleMetrics →</a>
+      </div>
+
+    </div>
+
+    <div class="cluster-label">US Cluster</div>
+    <div class="server-card" style="max-width: 440px;">
+      <p class="server-tbc">US cluster details to be confirmed. Check Discord for current US server information and schedules.</p>
+      <a class="server-link" href="https://discord.gg/fWXqjJDRsA" target="_blank" rel="noopener">Discord →</a>
+    </div>
+
+    <div class="connect-note">
+      <strong>Direct Connect Instructions</strong>
+      Launch Arma 3 Launcher → Servers → Direct Connect → Enter IP and Port → Connect.
+      If you receive a mod error, install required mods first — see the Mods &amp; Setup section below.
+    </div>
+  </div>
+</section>
+
+
+<!-- =====================
+     HOW TO JOIN
+===================== -->
+<section id="join">
+  <div class="container">
+    <div class="section-header">
+      <h2>How To Join</h2>
+      <p>Four steps from zero to your first operation.</p>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <h3>Join Discord</h3>
+        <p>Discord is the operational hub — schedules, briefings, mod lists and announcements all live here. Start here.</p>
+        <a class="step-cta" href="https://discord.gg/fWXqjJDRsA" target="_blank" rel="noopener">Join Discord →</a>
+      </div>
+      <div class="step-card">
+        <h3>Direct Connect to Server</h3>
+        <ol>
+          <li>Launch Arma 3 Launcher</li>
+          <li>Navigate to Servers</li>
+          <li>Select Direct Connect</li>
+          <li>Enter Server IP + Port</li>
+          <li>Connect</li>
+        </ol>
+        <p style="margin-top:0.6rem;">If you get a mod error, proceed to Step 3.</p>
+      </div>
+      <div class="step-card">
+        <h3>Install Required Mods</h3>
+        <ol>
+          <li>Exit game</li>
+          <li>Open Launcher → Mods tab</li>
+          <li>Subscribe to required mods via Steam Workshop</li>
+          <li>Build and save a preset for the server</li>
+        </ol>
+        <a class="step-cta" href="#mods">View Mod List →</a>
+      </div>
+      <div class="step-card">
+        <h3>Join Your First Operation</h3>
+        <ul>
+          <li>Check Discord for op schedule</li>
+          <li>Join voice channel before op starts</li>
+          <li>Follow role assignments</li>
+          <li>Respect mission design</li>
+          <li>Have fun</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =====================
+     MODS & SETUP
+===================== -->
+<section id="mods">
+  <div class="container">
+    <div class="section-header">
+      <h2>Mods &amp; Setup</h2>
+      <p>Required and optional mods with direct Steam Workshop links. Click any mod to subscribe.</p>
+    </div>
+
+    <div class="mods-tabs">
+      <div class="mods-tab active" data-tab="required">Required — Vietnam Mike Force (18)</div>
+      <div class="mods-tab" data-tab="optional">Optional Immersion — WW2 (10)</div>
+    </div>
+
+    <div class="mods-panel active" id="tab-required">
+      <ul class="mods-list">
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=615007497"  target="_blank" rel="noopener">Advanced Sling Loading</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2873245695" target="_blank" rel="noopener">Cayuse with GPS</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=450814997"  target="_blank" rel="noopener">CBA_A3</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=837729515"  target="_blank" rel="noopener">CH View Distance</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3371033464" target="_blank" rel="noopener">Enhanced Armored Controls</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=333310405"  target="_blank" rel="noopener">Enhanced Movement</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2034363662" target="_blank" rel="noopener">Enhanced Movement Rework</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2291129343" target="_blank" rel="noopener">Improved Melee System</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=1804716719" target="_blank" rel="noopener">Ladder Tweak 2x</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=1520786131" target="_blank" rel="noopener">Light Blue Water Colour Mod</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=1397683809" target="_blank" rel="noopener">Reduced Haze Mod v3.1</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3083451905" target="_blank" rel="noopener">S.O.G. Nickel Steel</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=1808723766" target="_blank" rel="noopener">Swim Faster</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3123802904" target="_blank" rel="noopener">Swim With Any Uniform — Fixed</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2554978758" target="_blank" rel="noopener">Unsung Redux Stable</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2572487482" target="_blank" rel="noopener">WebKnight Flashlights and Headlamps</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2976569274" target="_blank" rel="noopener">WebKnight's Two Primary Weapons</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=1779063631" target="_blank" rel="noopener">Zeus Enhanced</a></li>
+      </ul>
+    </div>
+
+    <div class="mods-panel" id="tab-optional">
+      <ul class="mods-list">
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2976569274" target="_blank" rel="noopener">WebKnight's Two Primary Weapons</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2572487482" target="_blank" rel="noopener">WebKnight Flashlights and Headlamps</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3226850988" target="_blank" rel="noopener">DISMEMBERMENT+GORE [SP-MP]</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2993442344" target="_blank" rel="noopener">Death and Hit Reactions</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3132949782" target="_blank" rel="noopener">WBK Simple Blood</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3448431626" target="_blank" rel="noopener">Blastcore Murr Edition (TT Version)</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3289651152" target="_blank" rel="noopener">MTK — Faster Pistol Swap</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3407948300" target="_blank" rel="noopener">JSRS SOUNDMOD 2025</a></li>
+        <li><a href="https://steamcommunity.com/workshop/filedetails/?id=3358679992"    target="_blank" rel="noopener">The Big Three — Weapon Sounds</a></li>
+        <li><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3551235602" target="_blank" rel="noopener">The Big Three — Weapon Sounds (JSRS Compat)</a></li>
+      </ul>
+    </div>
+
+    <div class="mods-note">
+      <h4>Installation Instructions</h4>
+      <ul>
+        <li>Subscribe to required mods via the Steam Workshop links above.</li>
+        <li>Open Arma 3 Launcher → Mods tab and verify all mods are active.</li>
+        <li>Create and save a preset for your selected server.</li>
+        <li>Optional immersion mods are client-side — enable them at your discretion.</li>
+        <li>If you receive connection errors, verify all required mods are active and no unsupported mods are loaded.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- =====================
+     OPERATIONS
+===================== -->
+<section id="operations">
+  <div class="container">
+    <div class="section-header">
+      <h2>Operations</h2>
+      <p>Structure, doctrine and role guidance for Green Sharks operations.</p>
+    </div>
+
+    <div class="ops-grid">
+
+      <div class="ops-card">
+        <h3>Operation Structure</h3>
+        <ul>
+          <li>Work as a coordinated group at all times</li>
+          <li>Heal and support teammates in the field</li>
+          <li>Respect mission makers and Zeus guidance</li>
+          <li>Follow assigned roles and task assignments</li>
+          <li>Provide constructive feedback in designated channels</li>
+        </ul>
+      </div>
+
+      <div class="ops-card">
+        <h3>CAS Engagement Rules</h3>
+        <div class="cas-warning">All pilots must acknowledge CAS rules before flying. Verify all targets via map before engaging.</div>
+        <table class="strike-table">
+          <thead><tr><th>Weapon Type</th><th>Min Distance</th></tr></thead>
+          <tbody>
+            <tr><td>Missile / Rocket strikes</td><td>75 m</td></tr>
+            <tr><td>Bombs (standard)</td><td>100 m</td></tr>
+            <tr><td>Napalm / Daisy Cutter</td><td>150 m</td></tr>
+          </tbody>
+        </table>
+        <ul style="margin-top:0.8rem;">
+          <li>Do not bomb HQ or mortars</li>
+          <li>Avoid striking close to FOB</li>
+          <li>Leave custom objectives to ground troops on event days</li>
+          <li>Deliver supplies when not conducting air support</li>
+          <li>Never leave men on ground during extract</li>
+          <li>Primary mission: support ground troops — not the scoreboard</li>
+        </ul>
+      </div>
+
+      <div class="ops-card">
+        <h3>RTO — Fire Support Timing</h3>
+        <ul>
+          <li>Supports may be called once per restart (some recharge)</li>
+          <li>15 seconds minimum between requests</li>
+          <li>~1 minute from call to impact</li>
+          <li>25 seconds from "aircraft inbound" to impact</li>
+        </ul>
+        <table class="strike-table" style="margin-top:0.8rem;">
+          <thead><tr><th>Strike Type</th><th>Cooldown</th></tr></thead>
+          <tbody>
+            <tr><td>Commando Vault (Daisy Cutter)</td><td>30 min</td></tr>
+            <tr><td>Arc Light</td><td>30 min</td></tr>
+            <tr><td>F4 Bomb Strike</td><td>5.5 min</td></tr>
+            <tr><td>Napalm Strike</td><td>5.5 min</td></tr>
+            <tr><td>20mm Gun Run</td><td>2.5 min</td></tr>
+            <tr><td>Illumination</td><td>5 min</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ops-card">
+        <h3>Role Overview</h3>
+        <ul>
+          <li>Ground infantry — primary combat element</li>
+          <li>CAS pilots — air support and supply runs</li>
+          <li>RTO — coordinates fire support calls</li>
+          <li>Zeus — mission maker and event director</li>
+          <li>Aircraft use requires roster or admin approval</li>
+          <li>Role assignments are respected for the full op</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- =====================
+     RULES
+===================== -->
+<section id="rules">
+  <div class="container">
+    <div class="section-header">
+      <h2>Rules</h2>
+      <p>Firm but fair. Common sense and teamwork above all.</p>
+    </div>
+
+    <div class="rules-grid">
+      <div class="rules-card">
+        <h3>General Conduct</h3>
+        <ul>
+          <li>Respect admins and mission makers</li>
+          <li>No excessive explosives or spam mines</li>
+          <li>No abusing arsenals</li>
+          <li>No Fortnite-style building exploits</li>
+          <li>Do not intentionally block AI pathfinding</li>
+          <li>Use aircraft only if rostered or approved</li>
+        </ul>
+      </div>
+      <div class="rules-card">
+        <h3>Operation Days</h3>
+        <ul>
+          <li>Work as a coordinated unit</li>
+          <li>Actively heal and support teammates</li>
+          <li>Provide constructive feedback in designated channels</li>
+          <li>Respect custom objective structure</li>
+          <li>Follow Zeus and admin direction</li>
+        </ul>
+      </div>
+      <div class="rules-card">
+        <h3>CAS Rules (Summary)</h3>
+        <ul>
+          <li>Verify all targets on map before firing</li>
+          <li>Observe minimum strike distances</li>
+          <li>Do not bomb HQ, mortars, or FOB vicinity</li>
+          <li>Leave event objectives to ground troops</li>
+          <li>Support the ground — not the scoreboard</li>
+          <li>Maintain safe distance between aircraft</li>
+        </ul>
+      </div>
+      <div class="rules-card">
+        <h3>Community Expectations</h3>
+        <ul>
+          <li>Treat all players with respect</li>
+          <li>Constructive feedback only</li>
+          <li>International players are welcome</li>
+          <li>No toxicity, elitism or gatekeeping</li>
+          <li>Represent Green Sharks well in joint ops</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =====================
+     COMMUNITY
+===================== -->
+<section id="community">
+  <div class="container">
+    <div class="section-header">
+      <h2>Community</h2>
+      <p>Who we are and what we stand for.</p>
+    </div>
+
+    <div class="stat-strip">
+      <div class="stat-item">
+        <span class="stat-value">2023</span>
+        <span class="stat-label">Founded</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">AU + US</span>
+        <span class="stat-label">Server Clusters</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">4</span>
+        <span class="stat-label">Game Modes</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">$0</span>
+        <span class="stat-label">Cost to Join</span>
+      </div>
+    </div>
+
+    <div class="community-layout">
+      <div>
+        <h3 style="color:var(--green-light); margin-bottom:1rem; font-size:0.95rem;">What We Value</h3>
+        <ul class="values-list">
+          <li>Teamwork</li>
+          <li>Competence</li>
+          <li>Clear communication</li>
+          <li>Role discipline</li>
+          <li>Constructive feedback</li>
+          <li>International inclusion</li>
+          <li>Play serious</li>
+          <li>Stay grounded</li>
+        </ul>
+      </div>
+      <div>
+        <div class="ops-card">
+          <h3>Who We Are</h3>
+          <ul>
+            <li>Established July 2023</li>
+            <li>International player base</li>
+            <li>Active AU/NZ and US clusters</li>
+            <li>Arma 3 &amp; Arma Reforger focused</li>
+            <li>No fees. No contracts.</li>
+            <li>Cross-community partnerships</li>
+            <li>Active YouTube media presence</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =====================
+     PARTNERS
+===================== -->
+<section id="partners">
+  <div class="container">
+    <div class="section-header">
+      <h2>Partners</h2>
+      <p>Green Sharks collaborates with other groups for joint operations and events.</p>
+    </div>
+    <div class="partners-card">
+      <p>Partner group details to be finalized. Green Sharks currently runs joint operations with US-based Arma communities including TFS. Check Discord for active partnership announcements and joint op schedules.</p>
+      <a href="https://discord.gg/fWXqjJDRsA" target="_blank" rel="noopener" class="server-link" style="margin-top:1rem;">Discord Announcements →</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- =====================
+     MEDIA
+===================== -->
+<section id="media">
+  <div class="container">
+    <div class="section-header">
+      <h2>Media</h2>
+      <p>Operation highlights, YouTube clips and community screenshots.</p>
+    </div>
+
+    <div class="media-grid">
+      <div class="media-placeholder">
+        <h3>YouTube Channel</h3>
+        <p>Official Green Sharks highlight reels and operation footage.<br>Channel link to be added.</p>
+      </div>
+      <div class="media-side">
+        <div class="media-placeholder">
+          <h3>Screenshot Gallery</h3>
+          <p>Operation highlights — coming soon.</p>
+        </div>
+        <div class="media-placeholder">
+          <h3>Community Clips</h3>
+          <p>Short-form highlights — coming soon.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =====================
+     FAQ
+===================== -->
+<section id="faq">
+  <div class="container">
+    <div class="section-header">
+      <h2>FAQ</h2>
+      <p>Common questions answered.</p>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-question">Do I need prior Arma experience? <span class="faq-icon">+</span></div>
+        <div class="faq-answer"><div class="faq-answer-inner">No experience required. We'll teach you the basics. Show up, follow direction, and you'll pick it up quickly.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Are there any fees or membership costs? <span class="faq-icon">+</span></div>
+        <div class="faq-answer"><div class="faq-answer-inner">No. Green Sharks is completely free to join and participate in. No subscriptions, no paywalls, no tiers.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Is this hardcore milsim? <span class="faq-icon">+</span></div>
+        <div class="faq-answer"><div class="faq-answer-inner">Structured and serious — but welcoming. We take our ops seriously without being elitist. Teamwork and communication are expected; rigid military cosplay is not.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Can I play from Australia or the US? <span class="faq-icon">+</span></div>
+        <div class="faq-answer"><div class="faq-answer-inner">Yes. We operate AU and US server clusters. The US server is also playable from AU at acceptable ping. Check Discord for current operation schedules across timezones.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Do I need all the optional mods? <span class="faq-icon">+</span></div>
+        <div class="faq-answer"><div class="faq-answer-inner">No. Only required mods are needed to connect and play. Optional immersion mods are client-side and run entirely at your discretion.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Where do I find the operation schedule? <span class="faq-icon">+</span></div>
+        <div class="faq-answer"><div class="faq-answer-inner">All operation schedules are posted in Discord. Join via the link and check the #op-schedule channel.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =====================
+     FOOTER
+===================== -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h3>Green Sharks</h3>
+        <p>Tactical PvE Operations.<br>AU &amp; US. No Fees.<br>Est. July 2023.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#servers">Servers</a></li>
+          <li><a href="#join">How To Join</a></li>
+          <li><a href="#mods">Mods &amp; Setup</a></li>
+          <li><a href="#operations">Operations</a></li>
+          <li><a href="#rules">Rules</a></li>
+          <li><a href="#community">Community</a></li>
+          <li><a href="#media">Media</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="https://discord.gg/fWXqjJDRsA" target="_blank" rel="noopener">Discord Server</a></li>
+          <li><a href="https://www.battlemetrics.com/servers/reforger/34925429" target="_blank" rel="noopener">Reforger Modern (BattleMetrics)</a></li>
+          <li><a href="https://www.battlemetrics.com/servers/reforger/35450040" target="_blank" rel="noopener">Reforger Vietnam (BattleMetrics)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Green Sharks. International Arma Community.</p>
+      <a href="https://discord.gg/fWXqjJDRsA" target="_blank" rel="noopener" class="discord-btn">Join Discord</a>
+    </div>
+  </div>
+</footer>
+
+
+<!-- =====================
+     JAVASCRIPT
+===================== -->
+<script>
+  // Hamburger menu toggle
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+  function closeMobile() { mobileMenu.classList.remove('open'); }
+  document.addEventListener('click', (e) => {
+    if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+      mobileMenu.classList.remove('open');
+    }
+  });
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-question').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.closest('.faq-item');
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+
+  // Mods tabs
+  document.querySelectorAll('.mods-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab;
+      document.querySelectorAll('.mods-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.mods-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('tab-' + target).classList.add('active');
+    });
+  });
+
+  // Active nav highlight on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>

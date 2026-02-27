@@ -65,32 +65,34 @@
         </div>
         <div>
           <div class="media-form">
-            <h3>Submit a YouTube link</h3>
-            <p>Paste any YouTube video URL (watch or share). We’ll use it to embed and play here. Submissions can be added to the feed by admins.</p>
+            <h3>Submit a highlight</h3>
+            <p>Submit a YouTube highlight for review. Approved clips will appear in the feed.</p>
             <div class="field">
-              <label for="yt-url">YouTube URL</label>
-              <input type="url" id="yt-url" name="yt-url" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off">
-              <small>Accepts youtube.com/watch?v=..., youtu.be/..., or embed links.</small>
+              <label for="yt-url">YouTube URL *</label>
+              <input type="url" id="yt-url" name="yt-url" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off" required>
             </div>
             <div class="field">
-              <label for="yt-title">Title or description (optional)</label>
-              <input type="text" id="yt-title" name="yt-title" placeholder="e.g. Vietnam op highlight">
+              <label for="yt-title">Video title *</label>
+              <input type="text" id="yt-title" name="yt-title" placeholder="e.g. Vietnam Mike Force CAS run" required>
+            </div>
+            <div class="field">
+              <label for="yt-submitter">Submitted by *</label>
+              <input type="text" id="yt-submitter" name="yt-submitter" placeholder="Your name / callsign" required>
+            </div>
+            <div class="field">
+              <label for="yt-discord">Discord name (optional)</label>
+              <input type="text" id="yt-discord" name="yt-discord" placeholder="e.g. Spidey#1234">
             </div>
             <div class="form-row">
-              <button type="button" class="btn btn-primary" id="btn-preview">Preview in-page</button>
-              <button type="button" class="btn btn-secondary" id="btn-submit">Copy link for Discord</button>
+              <button type="button" class="btn btn-primary" id="btn-submit">Submit highlight</button>
             </div>
             <div class="form-message" id="form-message" role="status" aria-live="polite"></div>
           </div>
           <div class="media-form" style="margin-top: 1.25rem;">
-            <h3>How to submit for the feed</h3>
-            <p>Share your YouTube link in the Discord media/highlights channel. Just paste the link — no need to use an embed code. Admins may add approved clips to the site feed.</p>
+            <h3>Review & approval</h3>
+            <p>Submissions are sent to the media channel in Discord. Admins review and approve clips there; approved videos are then added to this page.</p>
           </div>
         </div>
-      </div>
-
-      <div class="media-player-grid" style="margin-top: 2rem;" id="preview-area">
-        <!-- Preview embed appears here when user clicks "Preview in-page" -->
       </div>
     </div>
   </section>

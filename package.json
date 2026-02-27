@@ -1,0 +1,12 @@
+{
+  "name": "green-sharks-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Green Sharks tactical PvE community site (static with Netlify Functions).",
+  "scripts": {
+    "build": "echo \"Static site — no build\"",
+    "netlify:functions": "echo \"Functions live in netlify.functions/\""
+  },
+  "license": "UNLICENSED"
+}
+

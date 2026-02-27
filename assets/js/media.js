@@ -1,14 +1,15 @@
 /**
- * Media page: YouTube feed and submit link (parse URL → embed, preview in-page, copy for Discord).
- * No LLM required: we extract video ID with regex. Optional: call backend/LLM later for messy pastes.
+ * Media page: YouTube feed and highlight submission.
+ * - Renders a featured video + grid from data/videos.json
+ * - Submits new highlight requests to a Netlify Function, which forwards to Discord.
  */
 
 (function () {
   var feedEl = document.getElementById('video-feed');
-  var previewEl = document.getElementById('preview-area');
   var ytInput = document.getElementById('yt-url');
   var titleInput = document.getElementById('yt-title');
-  var btnPreview = document.getElementById('btn-preview');
+  var submitterInput = document.getElementById('yt-submitter');
+  var discordInput = document.getElementById('yt-discord');
   var btnSubmit = document.getElementById('btn-submit');
   var formMessage = document.getElementById('form-message');
 
@@ -57,57 +58,61 @@
     formMessage.className = 'form-message' + (isError ? ' error' : ' success');
   }
 
-  if (btnPreview && ytInput && previewEl) {
-    btnPreview.addEventListener('click', function () {
+  if (btnSubmit && ytInput) {
+    btnSubmit.addEventListener('click', function () {
+      if (!ytInput || !titleInput || !submitterInput) return;
       var url = ytInput.value.trim();
-      var title = titleInput ? titleInput.value.trim() : '';
+      var title = titleInput.value.trim();
+      var submittedBy = submitterInput.value.trim();
+      var discordName = discordInput ? discordInput.value.trim() : '';
+
+      if (!url || !title || !submittedBy) {
+        showMessage('Please fill in URL, title, and submitted by.', true);
+        return;
+      }
+
       var id = getYouTubeVideoId(url);
       if (!id) {
         showMessage('Please enter a valid YouTube URL (e.g. youtube.com/watch?v=... or youtu.be/...).', true);
         return;
       }
-      showMessage('');
-      previewEl.innerHTML = '<h3 style="color:var(--green-light); margin-bottom:0.75rem; font-size:0.95rem;">Preview</h3>' + renderCard(id, title || 'Your submission');
-      previewEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    });
-  }
 
-  if (btnSubmit && ytInput) {
-    btnSubmit.addEventListener('click', function () {
-      var url = ytInput.value.trim();
-      if (!url) {
-        showMessage('Paste a YouTube link first.', true);
+      showMessage('Submitting highlight…', false);
+      btnSubmit.disabled = true;
+
+      var payload = {
+        videoUrl: url,
+        videoId: id,
+        title: title,
+        submittedBy: submittedBy,
+        discordName: discordName
+      };
+
+      if (typeof fetch === 'undefined') {
+        showMessage('Submission not supported in this browser.', true);
+        btnSubmit.disabled = false;
         return;
       }
-      var id = getYouTubeVideoId(url);
-      var toCopy = id ? ('https://www.youtube.com/watch?v=' + id) : url;
-      if (typeof navigator !== 'undefined' && navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(toCopy).then(function () {
-          showMessage('Link copied. Paste it in the Discord media channel to submit.');
-        }).catch(function () {
-          fallbackCopy(toCopy);
-        });
-      } else {
-        fallbackCopy(toCopy);
-      }
-    });
-  }
 
-  function fallbackCopy(text) {
-    var ta = document.createElement('textarea');
-    ta.value = text;
-    ta.setAttribute('readonly', '');
-    ta.style.position = 'fixed';
-    ta.style.left = '-9999px';
-    document.body.appendChild(ta);
-    ta.select();
-    try {
-      document.execCommand('copy');
-      showMessage('Link copied. Paste it in the Discord media channel to submit.');
-    } catch (e) {
-      showMessage('Copy failed. Share this link in Discord: ' + text, true);
-    }
-    document.body.removeChild(ta);
+      fetch('/.netlify/functions/submit-highlight', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).then(function (res) {
+        if (!res.ok) throw new Error('Request failed');
+        return res.json().catch(function () { return {}; });
+      }).then(function () {
+        showMessage('Submitted. Your clip will be reviewed in Discord before appearing here.', false);
+        ytInput.value = '';
+        titleInput.value = '';
+        submitterInput.value = '';
+        if (discordInput) discordInput.value = '';
+      }).catch(function () {
+        showMessage('Something went wrong submitting your highlight. Please try again later.', true);
+      }).finally(function () {
+        btnSubmit.disabled = false;
+      });
+    });
   }
 
   /** Load feed from data/videos.json or use inline default. */

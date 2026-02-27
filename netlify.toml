@@ -5,6 +5,9 @@
   publish = "."
   command = "echo 'Static site — no build'"
 
+[functions]
+  directory = "netlify.functions"
+
 # Optional: redirects for SPA or legacy URLs
 # [[redirects]]
 #   from = "/*"

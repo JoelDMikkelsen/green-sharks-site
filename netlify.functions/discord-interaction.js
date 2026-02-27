@@ -58,7 +58,7 @@ exports.handler = async function (event) {
 
     if (customId.startsWith('approve_highlight:')) {
       const videoId = customId.split(':')[1];
-      
+
       // Extract the title from the embed
       let videoTitle = 'Approved Highlight';
       if (payload.message && payload.message.embeds && payload.message.embeds.length > 0) {
@@ -68,15 +68,15 @@ exports.handler = async function (event) {
       // --- GitHub API Integration ---
       const githubToken = process.env.GITHUB_TOKEN;
       // You must set GITHUB_REPO in Netlify env vars, format: "owner/repo"
-      const githubRepo = process.env.GITHUB_REPO; 
-      
+      const githubRepo = process.env.GITHUB_REPO;
+
       if (!githubToken || !githubRepo) {
         console.error('GitHub config missing');
         // Acknowledge the interaction but report error in message
-         return {
+        return {
           statusCode: 200,
           body: JSON.stringify({
-            type: 4, 
+            type: 4,
             data: {
               content: "❌ Setup incomplete. `GITHUB_TOKEN` or `GITHUB_REPO` is missing in Netlify.",
               flags: 64 // Ephemeral (only visible to the user who clicked)
@@ -86,7 +86,7 @@ exports.handler = async function (event) {
       }
 
       try {
-        const branch = 'main'; // Changed from master to main based on user input
+        const branch = 'master'; // Returned back to master since remote is also master
         const filePath = 'data/videos.json';
         const apiUrl = `https://api.github.com/repos/${githubRepo}/contents/${filePath}?ref=${branch}`;
 
@@ -99,7 +99,7 @@ exports.handler = async function (event) {
         });
 
         if (!getRes.ok) {
-           throw new Error(`Failed to fetch file: ${getRes.statusText}`);
+          throw new Error(`Failed to fetch file: ${getRes.statusText}`);
         }
 
         const currentFileData = await getRes.json();
@@ -114,15 +114,15 @@ exports.handler = async function (event) {
 
         // Prepend to the array
         if (videosData.videos) {
-            videosData.videos.unshift(newVideo);
+          videosData.videos.unshift(newVideo);
         } else if (Array.isArray(videosData)) {
-            videosData.unshift(newVideo);
+          videosData.unshift(newVideo);
         }
 
         // Commit updated file
         const newContentB64 = Buffer.from(JSON.stringify(videosData, null, 2)).toString('base64');
         const updateUrl = `https://api.github.com/repos/${githubRepo}/contents/${filePath}`;
-        
+
         const putRes = await fetch(updateUrl, {
           method: 'PUT',
           headers: {
@@ -139,7 +139,7 @@ exports.handler = async function (event) {
         });
 
         if (!putRes.ok) {
-            throw new Error(`Failed to commit file: ${putRes.statusText}`);
+          throw new Error(`Failed to commit file: ${putRes.statusText}`);
         }
 
         // 4. Respond to Discord: Update the original message
@@ -160,7 +160,7 @@ exports.handler = async function (event) {
         return {
           statusCode: 200,
           body: JSON.stringify({
-            type: 4, 
+            type: 4,
             data: {
               content: `❌ Failed to update GitHub: ${error.message}`,
               flags: 64

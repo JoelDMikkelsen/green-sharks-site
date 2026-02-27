@@ -1,0 +1,16 @@
+# Green Sharks — Netlify deployment
+# Static site: no build step; publish root as-is.
+
+[build]
+  publish = "."
+  command = "echo 'Static site — no build'"
+
+# Optional: redirects for SPA or legacy URLs
+# [[redirects]]
+#   from = "/*"
+#   to = "/index.html"
+#   status = 200
+
+# Optional: env for serverless (if you add netlify/functions)
+# [build.environment]
+#   NODE_VERSION = "18"

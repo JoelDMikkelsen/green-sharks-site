@@ -7,6 +7,8 @@
     "build": "echo \"Static site — no build\"",
     "netlify:functions": "echo \"Functions live in netlify.functions/\""
   },
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "dependencies": {
+    "tweetnacl": "^1.0.3"
+  }
 }
-

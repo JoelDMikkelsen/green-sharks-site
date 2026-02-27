@@ -92,11 +92,11 @@ exports.handler = async function (event) {
         console.error("Error triggering background function:", err);
       }
 
-      // 4. Respond to Discord IMMEDIATELY: Type 5 (DEFERRED_UPDATE_MESSAGE)
+      // 4. Respond to Discord IMMEDIATELY: Type 6 (DEFERRED_UPDATE_MESSAGE)
       return {
         statusCode: 200,
         body: JSON.stringify({
-          type: 5 // Acknowledge interaction and wait for followup
+          type: 6 // Acknowledge button click and wait for followup
         })
       };
     }

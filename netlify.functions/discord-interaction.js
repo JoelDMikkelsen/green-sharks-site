@@ -86,7 +86,7 @@ exports.handler = async function (event) {
       }
 
       try {
-        const branch = 'master'; // or main, adjust if needed
+        const branch = 'main'; // Changed from master to main based on user input
         const filePath = 'data/videos.json';
         const apiUrl = `https://api.github.com/repos/${githubRepo}/contents/${filePath}?ref=${branch}`;
 

@@ -77,12 +77,20 @@ exports.handler = async function (event) {
       const protocol = host.includes('localhost') ? 'http' : 'https';
       const backgroundUrl = `${protocol}://${host}/.netlify/functions/discord-interaction-background`;
 
-      // Dispatch the heavy lifting to the background function without awaiting it
-      fetch(backgroundUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      }).catch(err => console.error("Error triggering background function:", err));
+      // Dispatch the heavy lifting to the background function.
+      // We must AWAIT this fetch just long enough for the network request to leave the Netlify container,
+      // but NOT long enough to wait for the background function to finish.
+      // Actually, Netlify background functions return a 202 Accepted immediately. So we CAN await it!
+      try {
+        await fetch(backgroundUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        console.log("Successfully triggered background function at:", backgroundUrl);
+      } catch (err) {
+        console.error("Error triggering background function:", err);
+      }
 
       // 4. Respond to Discord IMMEDIATELY: Type 5 (DEFERRED_UPDATE_MESSAGE)
       return {

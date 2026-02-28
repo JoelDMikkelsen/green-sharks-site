@@ -1,164 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Media | Green Sharks</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicons/favicon-16x16.png">
+  <link rel="manifest" href="assets/images/favicons/site.webmanifest">
+  <link rel="icon" href="assets/images/favicons/favicon.ico">
   <meta name="description" content="Green Sharks YouTube highlights and community clips. Submit your video links.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="assets/css/main.css">
 </head>
+
 <body>
 
-<nav>
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">Green<span>Sharks</span></a>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="index.html#servers">Servers</a></li>
-      <li><a href="index.html#join">How To Join</a></li>
-      <li><a href="index.html#mods">Mods</a></li>
-      <li><a href="operations.html">Operations</a></li>
-      <li><a href="index.html#rules">Rules</a></li>
-      <li><a href="index.html#community">Community</a></li>
-      <li><a href="media.html" class="active">Media</a></li>
-      <li><a href="gallery.html">Gallery</a></li>
-      <li><a href="index.html#faq">FAQ</a></li>
-      <li><a href="https://discord.gg/fWXqjJDRsA" target="_blank" rel="noopener" class="nav-cta">Discord</a></li>
-    </ul>
-    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Green<span>Sharks</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#servers">Servers</a></li>
+        <li><a href="index.html#join">How To Join</a></li>
+        <li><a href="index.html#mods">Mods</a></li>
+        <li><a href="operations.html">Operations</a></li>
+        <li><a href="index.html#rules">Rules</a></li>
+        <li><a href="index.html#community">Community</a></li>
+        <li><a href="media.html" class="active">Media</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="index.html#faq">FAQ</a></li>
+        <li><a href="https://discord.gg/fWXqjJDRsA" target="_blank" rel="noopener" class="nav-cta">Discord</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html" onclick="closeMobile()">Home</a>
+    <a href="index.html#servers" onclick="closeMobile()">Servers</a>
+    <a href="index.html#join" onclick="closeMobile()">How To Join</a>
+    <a href="index.html#mods" onclick="closeMobile()">Mods</a>
+    <a href="operations.html" onclick="closeMobile()">Operations</a>
+    <a href="index.html#rules" onclick="closeMobile()">Rules</a>
+    <a href="index.html#community" onclick="closeMobile()">Community</a>
+    <a href="media.html" onclick="closeMobile()">Media</a>
+    <a href="gallery.html" onclick="closeMobile()">Gallery</a>
+    <a href="index.html#faq" onclick="closeMobile()">FAQ</a>
+    <a href="https://discord.gg/fWXqjJDRsA" target="_blank" rel="noopener">Join Discord →</a>
   </div>
-</nav>
 
-<div class="mobile-menu" id="mobile-menu">
-  <a href="index.html" onclick="closeMobile()">Home</a>
-  <a href="index.html#servers" onclick="closeMobile()">Servers</a>
-  <a href="index.html#join" onclick="closeMobile()">How To Join</a>
-  <a href="index.html#mods" onclick="closeMobile()">Mods</a>
-  <a href="operations.html" onclick="closeMobile()">Operations</a>
-  <a href="index.html#rules" onclick="closeMobile()">Rules</a>
-  <a href="index.html#community" onclick="closeMobile()">Community</a>
-  <a href="media.html" onclick="closeMobile()">Media</a>
-  <a href="gallery.html" onclick="closeMobile()">Gallery</a>
-  <a href="index.html#faq" onclick="closeMobile()">FAQ</a>
-  <a href="https://discord.gg/fWXqjJDRsA" target="_blank" rel="noopener">Join Discord →</a>
-</div>
+  <main style="padding-top: var(--nav-height);">
+    <section id="media-page">
+      <div class="container">
+        <div class="section-header">
+          <h2>Media</h2>
+          <p>Official highlights and community-submitted YouTube clips. Watch in-browser or submit your link.</p>
+        </div>
 
-<main style="padding-top: var(--nav-height);">
-  <section id="media-page">
+        <div class="media-layout">
+          <div>
+            <h3 style="color: var(--green-light); margin-bottom: 1rem; font-size: 0.95rem;">YouTube Feed</h3>
+
+            <div class="media-controls-bar">
+              <div class="media-search-wrap">
+                <input type="text" id="media-search" class="media-search-input" placeholder="Search videos by title..."
+                  autocomplete="off">
+              </div>
+              <div class="media-sort-wrap">
+                <select id="media-sort" class="media-sort-select">
+                  <option value="newest">Newest First</option>
+                  <option value="oldest">Oldest First</option>
+                  <option value="az">Title (A-Z)</option>
+                  <option value="za">Title (Z-A)</option>
+                  <option value="uploader_az">Uploader (A-Z)</option>
+                  <option value="discord_az">Discord Name (A-Z)</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="video-feed">
+              <!-- Populated by JS from data/videos.json -->
+            </div>
+
+            <div class="media-pagination" id="media-pagination" style="display: none;">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+          <div>
+            <div class="media-form">
+              <h3>Submit a highlight</h3>
+              <p>Submit a YouTube highlight for review. Approved clips will appear in the feed.</p>
+              <div class="field">
+                <label for="yt-url">YouTube URL *</label>
+                <input type="url" id="yt-url" name="yt-url" placeholder="https://www.youtube.com/watch?v=..."
+                  autocomplete="off" required>
+              </div>
+              <div class="field">
+                <label for="yt-title">Video title *</label>
+                <input type="text" id="yt-title" name="yt-title" placeholder="e.g. Vietnam Mike Force CAS run" required>
+              </div>
+              <div class="field">
+                <label for="yt-submitter">Submitted by *</label>
+                <input type="text" id="yt-submitter" name="yt-submitter" placeholder="Your name / callsign" required>
+              </div>
+              <div class="field">
+                <label for="yt-discord">Discord name (optional)</label>
+                <input type="text" id="yt-discord" name="yt-discord" placeholder="e.g. Spidey#1234">
+              </div>
+              <div class="form-row">
+                <button type="button" class="btn btn-primary" id="btn-submit">Submit highlight</button>
+              </div>
+              <div class="form-message" id="form-message" role="status" aria-live="polite"></div>
+            </div>
+            <div class="media-form" style="margin-top: 1.25rem;">
+              <h3>Review & approval</h3>
+              <p>Submissions are sent to the media channel in Discord. Admins review and approve clips there; approved
+                videos are then added to this page.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
     <div class="container">
-      <div class="section-header">
-        <h2>Media</h2>
-        <p>Official highlights and community-submitted YouTube clips. Watch in-browser or submit your link.</p>
-      </div>
-
-      <div class="media-layout">
-        <div>
-          <h3 style="color: var(--green-light); margin-bottom: 1rem; font-size: 0.95rem;">YouTube Feed</h3>
-          
-          <div class="media-controls-bar">
-            <div class="media-search-wrap">
-              <input type="text" id="media-search" class="media-search-input" placeholder="Search videos by title..." autocomplete="off">
-            </div>
-            <div class="media-sort-wrap">
-              <select id="media-sort" class="media-sort-select">
-                <option value="newest">Newest First</option>
-                <option value="oldest">Oldest First</option>
-                <option value="az">Title (A-Z)</option>
-                <option value="za">Title (Z-A)</option>
-                <option value="uploader_az">Uploader (A-Z)</option>
-                <option value="discord_az">Discord Name (A-Z)</option>
-              </select>
-            </div>
-          </div>
-
-          <div id="video-feed">
-            <!-- Populated by JS from data/videos.json -->
-          </div>
-
-          <div class="media-pagination" id="media-pagination" style="display: none;">
-            <!-- Rendered by JS -->
-          </div>
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <h3>Green Sharks</h3>
+          <p>Tactical PvE Operations.<br>AU &amp; US. No Fees.<br>Est. July 2023.</p>
         </div>
-        <div>
-          <div class="media-form">
-            <h3>Submit a highlight</h3>
-            <p>Submit a YouTube highlight for review. Approved clips will appear in the feed.</p>
-            <div class="field">
-              <label for="yt-url">YouTube URL *</label>
-              <input type="url" id="yt-url" name="yt-url" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off" required>
-            </div>
-            <div class="field">
-              <label for="yt-title">Video title *</label>
-              <input type="text" id="yt-title" name="yt-title" placeholder="e.g. Vietnam Mike Force CAS run" required>
-            </div>
-            <div class="field">
-              <label for="yt-submitter">Submitted by *</label>
-              <input type="text" id="yt-submitter" name="yt-submitter" placeholder="Your name / callsign" required>
-            </div>
-            <div class="field">
-              <label for="yt-discord">Discord name (optional)</label>
-              <input type="text" id="yt-discord" name="yt-discord" placeholder="e.g. Spidey#1234">
-            </div>
-            <div class="form-row">
-              <button type="button" class="btn btn-primary" id="btn-submit">Submit highlight</button>
-            </div>
-            <div class="form-message" id="form-message" role="status" aria-live="polite"></div>
-          </div>
-          <div class="media-form" style="margin-top: 1.25rem;">
-            <h3>Review & approval</h3>
-            <p>Submissions are sent to the media channel in Discord. Admins review and approve clips there; approved videos are then added to this page.</p>
-          </div>
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#servers">Servers</a></li>
+            <li><a href="index.html#join">How To Join</a></li>
+            <li><a href="index.html#mods">Mods &amp; Setup</a></li>
+            <li><a href="operations.html">Operations</a></li>
+            <li><a href="index.html#rules">Rules</a></li>
+            <li><a href="index.html#community">Community</a></li>
+            <li><a href="media.html">Media</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="index.html#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="https://discord.gg/fWXqjJDRsA" target="_blank" rel="noopener">Discord Server</a></li>
+            <li><a href="https://www.battlemetrics.com/servers/reforger/34925429" target="_blank"
+                rel="noopener">Reforger Modern (BattleMetrics)</a></li>
+            <li><a href="https://www.battlemetrics.com/servers/reforger/35450040" target="_blank"
+                rel="noopener">Reforger Vietnam (BattleMetrics)</a></li>
+          </ul>
         </div>
       </div>
+      <div class="footer-bottom">
+        <p>© 2025 Green Sharks. International Arma Community.</p>
+        <a href="https://discord.gg/fWXqjJDRsA" target="_blank" rel="noopener" class="discord-btn">Join Discord</a>
+      </div>
     </div>
-  </section>
-</main>
+  </footer>
 
-<footer>
-  <div class="container">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <h3>Green Sharks</h3>
-        <p>Tactical PvE Operations.<br>AU &amp; US. No Fees.<br>Est. July 2023.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Navigation</h4>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="index.html#servers">Servers</a></li>
-          <li><a href="index.html#join">How To Join</a></li>
-          <li><a href="index.html#mods">Mods &amp; Setup</a></li>
-          <li><a href="operations.html">Operations</a></li>
-          <li><a href="index.html#rules">Rules</a></li>
-          <li><a href="index.html#community">Community</a></li>
-          <li><a href="media.html">Media</a></li>
-          <li><a href="gallery.html">Gallery</a></li>
-          <li><a href="index.html#faq">FAQ</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Connect</h4>
-        <ul>
-          <li><a href="https://discord.gg/fWXqjJDRsA" target="_blank" rel="noopener">Discord Server</a></li>
-          <li><a href="https://www.battlemetrics.com/servers/reforger/34925429" target="_blank" rel="noopener">Reforger Modern (BattleMetrics)</a></li>
-          <li><a href="https://www.battlemetrics.com/servers/reforger/35450040" target="_blank" rel="noopener">Reforger Vietnam (BattleMetrics)</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© 2025 Green Sharks. International Arma Community.</p>
-      <a href="https://discord.gg/fWXqjJDRsA" target="_blank" rel="noopener" class="discord-btn">Join Discord</a>
-    </div>
-  </div>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.js"></script>
-<script src="assets/js/main.js"></script>
-<script src="assets/js/media.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/media.js"></script>
 </body>
+
 </html>

@@ -153,13 +153,15 @@
       return 0; // fallback
     });
 
-    // 3. Paginate
+    // 3. Paginate (Load More approach)
+    // Instead of showing just page N, we show all items from page 1 to page N.
     var totalPages = Math.ceil(filtered.length / state.limit) || 1;
     if (state.page > totalPages) state.page = totalPages;
     if (state.page < 1) state.page = 1;
 
-    var startIdx = (state.page - 1) * state.limit;
-    var pageItems = filtered.slice(startIdx, startIdx + state.limit);
+    // Show from index 0 up to (page * limit)
+    var itemsToShow = state.page * state.limit;
+    var pageItems = filtered.slice(0, itemsToShow);
 
     // 4. Render Grid
     if (filtered.length === 0) {
@@ -169,7 +171,7 @@
     }
 
     // Only feature the first video if we are viewing the default unsorted page 1
-    var isPristine = (state.query === '' && state.sort === 'newest' && state.page === 1);
+    var isPristine = (state.query === '' && state.sort === 'newest');
     var html = '';
 
     if (isPristine && pageItems.length > 0) {
@@ -197,39 +199,26 @@
 
   function renderPagination(current, total) {
     if (!paginationEl) return;
-    if (total <= 1) {
+
+    // Hide the button completely if we've shown all available videos
+    if (current >= total) {
       paginationEl.style.display = 'none';
       return;
     }
 
     paginationEl.style.display = 'flex';
-    var prevDisabled = current <= 1 ? 'disabled' : '';
-    var nextDisabled = current >= total ? 'disabled' : '';
 
     paginationEl.innerHTML =
-      '<button class="page-btn" id="btn-prev" ' + prevDisabled + '>Previous</button>' +
-      '<span class="page-info">Page ' + current + ' of ' + total + '</span>' +
-      '<button class="page-btn" id="btn-next" ' + nextDisabled + '>Next</button>';
+      '<button class="page-btn" id="btn-show-more">Load More Videos</button>';
 
-    var btnPrev = document.getElementById('btn-prev');
-    var btnNext = document.getElementById('btn-next');
+    var btnShowMore = document.getElementById('btn-show-more');
 
-    if (btnPrev) {
-      btnPrev.addEventListener('click', function () {
-        if (state.page > 1) {
-          state.page--;
-          updateFeed();
-          scrollToFeedTop();
-        }
-      });
-    }
-
-    if (btnNext) {
-      btnNext.addEventListener('click', function () {
+    if (btnShowMore) {
+      btnShowMore.addEventListener('click', function () {
         if (state.page < total) {
           state.page++;
           updateFeed();
-          scrollToFeedTop();
+          // We intentionally do NOT scroll to top so the user stays where they were
         }
       });
     }

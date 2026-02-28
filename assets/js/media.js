@@ -34,13 +34,21 @@
     return 'https://www.youtube.com/embed/' + videoId + '?rel=0';
   }
 
-  function renderCard(videoId, title) {
+  function renderCard(videoId, title, submittedBy, discordName) {
     var titleText = title || 'YouTube video';
+    var submitterText = '';
+    if (submittedBy) {
+      submitterText = escapeHtml(submittedBy);
+      if (discordName) {
+        submitterText += ' <span style="opacity: 0.6; font-size: 0.9em;">(' + escapeHtml(discordName) + ')</span>';
+      }
+    }
+
     return (
       '<div class="media-card">' +
       '<iframe src="' + embedUrl(videoId) + '" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>' +
       '<h3>' + escapeHtml(titleText) + '</h3>' +
-      '<p>Watch in-browser</p>' +
+      (submitterText ? '<p>By: ' + submitterText + '</p>' : '<p>Watch in-browser</p>') +
       '</div>'
     );
   }
@@ -132,11 +140,24 @@
     if (!feedEl) return;
 
     // 1. Filter
-    var filtered = allVideos.filter(function (v) {
+    var filtered = allVideos;
+    if (state.query && typeof Fuse !== 'undefined') {
+      var fuse = new Fuse(allVideos, {
+        keys: ['title', 'submittedBy', 'discordName'],
+        threshold: 0.3, // 0.0 requires perfect match, 1.0 matches anything
+        ignoreLocation: true
+      });
+      filtered = fuse.search(state.query).map(function (result) { return result.item; });
+    } else if (state.query) {
+      // Fallback if Fuse failed to load
       var q = state.query.toLowerCase();
-      var t = (v.title || '').toLowerCase();
-      return t.indexOf(q) !== -1;
-    });
+      filtered = allVideos.filter(function (v) {
+        var t = (v.title || '').toLowerCase();
+        var s = (v.submittedBy || '').toLowerCase();
+        var d = (v.discordName || '').toLowerCase();
+        return t.indexOf(q) !== -1 || s.indexOf(q) !== -1 || d.indexOf(q) !== -1;
+      });
+    }
 
     // 2. Sort
     filtered.sort(function (a, b) {
@@ -144,6 +165,10 @@
         return (a.title || '').localeCompare(b.title || '');
       } else if (state.sort === 'za') {
         return (b.title || '').localeCompare(a.title || '');
+      } else if (state.sort === 'uploader_az') {
+        return (a.submittedBy || '').localeCompare(b.submittedBy || '');
+      } else if (state.sort === 'discord_az') {
+        return (a.discordName || '').localeCompare(b.discordName || '');
       } else if (state.sort === 'newest' || state.sort === 'oldest') {
         var dateA = a.date ? new Date(a.date).getTime() : 0;
         var dateB = b.date ? new Date(b.date).getTime() : 0;
@@ -179,17 +204,17 @@
       var rest = pageItems.slice(1);
       html += '<div class="media-featured">' +
         '<h3 class="media-featured-title">Featured Operation</h3>' +
-        renderCard(first.id, first.title || 'Featured highlight') +
+        renderCard(first.id, first.title || 'Featured highlight', first.submittedBy, first.discordName) +
         '</div>';
 
       if (rest.length) {
         html += '<div class="media-secondary-grid">' + rest.map(function (v) {
-          return renderCard(v.id, v.title || 'Highlight');
+          return renderCard(v.id, v.title || 'Highlight', v.submittedBy, v.discordName);
         }).join('') + '</div>';
       }
     } else {
       html += '<div class="media-secondary-grid">' + pageItems.map(function (v) {
-        return renderCard(v.id, v.title || 'Highlight');
+        return renderCard(v.id, v.title || 'Highlight', v.submittedBy, v.discordName);
       }).join('') + '</div>';
     }
 

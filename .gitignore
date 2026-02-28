@@ -15,3 +15,6 @@ Thumbs.db
 
 # Netlify
 .netlify/
+
+# Claude Code local config (not repo-wide, not committed)
+.claude/

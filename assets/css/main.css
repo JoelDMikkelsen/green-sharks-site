@@ -320,7 +320,7 @@ nav {
   font-size: 2.2rem; font-weight: 700;
   color: var(--green-dim); line-height: 1;
 }
-.step-card h3 { color: var(--green-light); margin-bottom: 0.75rem; font-size: 0.98rem; }
+.step-card h3 { color: var(--green-light); margin-bottom: 0.75rem; font-size: 0.98rem; padding-right: 3rem; }
 .step-card p, .step-card ol, .step-card ul {
   font-size: 0.86rem; color: var(--text-secondary); line-height: 1.7;
 }

@@ -9,6 +9,7 @@
   },
   "license": "UNLICENSED",
   "dependencies": {
+    "fuse.js": "^7.1.0",
     "tweetnacl": "^1.0.3"
   }
 }

@@ -134,7 +134,7 @@ exports.handler = async function (event) {
 
       // 4. Update the original Discord message
       const patchUrl = `https://discord.com/api/v10/webhooks/${appId}/${interactionToken}/messages/@original`;
-      await fetch(patchUrl, {
+      const patchRes = await fetch(patchUrl, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -143,6 +143,13 @@ exports.handler = async function (event) {
         })
       });
 
+      if (!patchRes.ok) {
+        const errText = await patchRes.text();
+        console.error('Discord PATCH Error:', errText);
+      } else {
+        console.log('Successfully patched Discord message.');
+      }
+
       return { statusCode: 202, body: 'Done' };
 
     } catch (error) {
@@ -150,13 +157,18 @@ exports.handler = async function (event) {
 
       // Report error back to original Discord message
       const patchUrl = `https://discord.com/api/v10/webhooks/${appId}/${interactionToken}/messages/@original`;
-      await fetch(patchUrl, {
+      const errPatchRes = await fetch(patchUrl, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           content: `❌ Failed to update GitHub: ${error.message}`
         })
       });
+
+      if (!errPatchRes.ok) {
+        const errText = await errPatchRes.text();
+        console.error('Discord Error PATCH failed:', errText);
+      }
 
       return { statusCode: 202, body: 'Failed but reported' };
     }

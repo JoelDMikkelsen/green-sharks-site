@@ -45,6 +45,7 @@ exports.handler = async function (event) {
   if (payload.type === 1) {
     return {
       statusCode: 200,
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ type: 1 })
     };
   }
@@ -62,6 +63,7 @@ exports.handler = async function (event) {
         console.error('DISCORD_APP_ID is not configured');
         return {
           statusCode: 200,
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             type: 4,
             data: { content: '❌ Setup incomplete. `DISCORD_APP_ID` is missing in Netlify.', flags: 64 }
@@ -101,6 +103,7 @@ exports.handler = async function (event) {
       // This edits the message instantly to a "loading" state, fully satisfying the 3-second rule.
       return {
         statusCode: 200,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           type: 7,
           data: {
@@ -115,6 +118,7 @@ exports.handler = async function (event) {
   // Fallback for unknown interaction types
   return {
     statusCode: 200,
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ type: 4, data: { content: 'Unknown interaction command' } })
   };
 };

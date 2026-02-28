@@ -115,44 +115,188 @@
     });
   }
 
-  /** Load feed from data/videos.json or use inline default. */
-  function loadFeed() {
+  // --- FEED & PAGINATION LOGIC ---
+  var allVideos = [];
+  var paginationEl = document.getElementById('media-pagination');
+  var searchInput = document.getElementById('media-search');
+  var sortSelect = document.getElementById('media-sort');
+
+  var state = {
+    query: '',
+    sort: 'newest', // 'newest', 'oldest', 'az', 'za'
+    page: 1,
+    limit: 6 // 6 videos per page looks good for a grid
+  };
+
+  function updateFeed() {
     if (!feedEl) return;
-    var defaultItems = [];
-    function renderFeed(items) {
-      if (!items || !items.length) {
-        feedEl.innerHTML = '<p class="form-message">No videos in the feed yet. Submit links via Discord to have them added.</p>';
-        return;
+
+    // 1. Filter
+    var filtered = allVideos.filter(function (v) {
+      var q = state.query.toLowerCase();
+      var t = (v.title || '').toLowerCase();
+      return t.indexOf(q) !== -1;
+    });
+
+    // 2. Sort
+    filtered.sort(function (a, b) {
+      if (state.sort === 'az') {
+        return (a.title || '').localeCompare(b.title || '');
+      } else if (state.sort === 'za') {
+        return (b.title || '').localeCompare(a.title || '');
+      } else if (state.sort === 'newest' || state.sort === 'oldest') {
+        var dateA = a.date ? new Date(a.date).getTime() : 0;
+        var dateB = b.date ? new Date(b.date).getTime() : 0;
+        if (state.sort === 'newest') return dateB - dateA;
+        return dateA - dateB;
       }
-      var first = items[0];
-      var rest = items.slice(1);
-      var firstId = typeof first === 'string' ? first : (first.id || first);
-      var firstTitle = typeof first === 'object' && first.title ? first.title : 'Featured highlight';
-      var html = '<div class="media-featured">' +
+      return 0; // fallback
+    });
+
+    // 3. Paginate
+    var totalPages = Math.ceil(filtered.length / state.limit) || 1;
+    if (state.page > totalPages) state.page = totalPages;
+    if (state.page < 1) state.page = 1;
+
+    var startIdx = (state.page - 1) * state.limit;
+    var pageItems = filtered.slice(startIdx, startIdx + state.limit);
+
+    // 4. Render Grid
+    if (filtered.length === 0) {
+      feedEl.innerHTML = '<p class="form-message">No videos found matching your search.</p>';
+      renderPagination(0, 1);
+      return;
+    }
+
+    // Only feature the first video if we are viewing the default unsorted page 1
+    var isPristine = (state.query === '' && state.sort === 'newest' && state.page === 1);
+    var html = '';
+
+    if (isPristine && pageItems.length > 0) {
+      var first = pageItems[0];
+      var rest = pageItems.slice(1);
+      html += '<div class="media-featured">' +
         '<h3 class="media-featured-title">Featured Operation</h3>' +
-        renderCard(firstId, firstTitle) +
+        renderCard(first.id, first.title || 'Featured highlight') +
         '</div>';
+
       if (rest.length) {
         html += '<div class="media-secondary-grid">' + rest.map(function (v) {
-          var id = typeof v === 'string' ? v : (v.id || v);
-          var title = typeof v === 'object' && v.title ? v.title : 'Highlight';
-          return renderCard(id, title);
+          return renderCard(v.id, v.title || 'Highlight');
         }).join('') + '</div>';
       }
-      feedEl.innerHTML = html;
+    } else {
+      html += '<div class="media-secondary-grid">' + pageItems.map(function (v) {
+        return renderCard(v.id, v.title || 'Highlight');
+      }).join('') + '</div>';
     }
+
+    feedEl.innerHTML = html;
+    renderPagination(state.page, totalPages);
+  }
+
+  function renderPagination(current, total) {
+    if (!paginationEl) return;
+    if (total <= 1) {
+      paginationEl.style.display = 'none';
+      return;
+    }
+
+    paginationEl.style.display = 'flex';
+    var prevDisabled = current <= 1 ? 'disabled' : '';
+    var nextDisabled = current >= total ? 'disabled' : '';
+
+    paginationEl.innerHTML =
+      '<button class="page-btn" id="btn-prev" ' + prevDisabled + '>Previous</button>' +
+      '<span class="page-info">Page ' + current + ' of ' + total + '</span>' +
+      '<button class="page-btn" id="btn-next" ' + nextDisabled + '>Next</button>';
+
+    var btnPrev = document.getElementById('btn-prev');
+    var btnNext = document.getElementById('btn-next');
+
+    if (btnPrev) {
+      btnPrev.addEventListener('click', function () {
+        if (state.page > 1) {
+          state.page--;
+          updateFeed();
+          scrollToFeedTop();
+        }
+      });
+    }
+
+    if (btnNext) {
+      btnNext.addEventListener('click', function () {
+        if (state.page < total) {
+          state.page++;
+          updateFeed();
+          scrollToFeedTop();
+        }
+      });
+    }
+  }
+
+  function scrollToFeedTop() {
+    if (feedEl) {
+      // scroll to just above the search controls
+      var headerEl = document.querySelector('.media-controls-bar');
+      var target = headerEl || feedEl;
+      var y = target.getBoundingClientRect().top + window.scrollY - 100;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  }
+
+  // Hook up controls
+  if (searchInput) {
+    searchInput.addEventListener('input', function (e) {
+      state.query = e.target.value;
+      state.page = 1;
+      updateFeed();
+    });
+  }
+
+  if (sortSelect) {
+    sortSelect.addEventListener('change', function (e) {
+      state.sort = e.target.value;
+      state.page = 1;
+      updateFeed();
+    });
+  }
+
+  /** Load feed from data/videos.json */
+  function loadFeedData() {
     if (typeof fetch !== 'undefined') {
       fetch('data/videos.json')
         .then(function (r) { return r.ok ? r.json() : null; })
         .then(function (data) {
-          var list = (data && data.videos) ? data.videos : (Array.isArray(data) ? data : null);
-          renderFeed(list && list.length ? list : defaultItems);
+          var list = (data && data.videos) ? data.videos : (Array.isArray(data) ? data : []);
+
+          // Normalize items if they are just strings (IDs) instead of objects
+          allVideos = list.map(function (item, idx) {
+            if (typeof item === 'string') {
+              // inject a fake date decreasing from today so string arrays don't break sorting
+              return { id: item, title: 'Highlight', date: new Date(Date.now() - idx * 86400000).toISOString() };
+            }
+            return item;
+          });
+
+          // Sort by newest initially just in case array in json isn't perfectly sorted
+          allVideos.sort(function (a, b) {
+            var dateA = a.date ? new Date(a.date).getTime() : 0;
+            var dateB = b.date ? new Date(b.date).getTime() : 0;
+            return dateB - dateA;
+          });
+
+          updateFeed();
         })
-        .catch(function () { renderFeed(defaultItems); });
+        .catch(function () {
+          allVideos = [];
+          updateFeed();
+        });
     } else {
-      renderFeed(defaultItems);
+      allVideos = [];
+      updateFeed();
     }
   }
 
-  loadFeed();
+  loadFeedData();
 })();

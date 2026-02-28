@@ -59,8 +59,27 @@
       <div class="media-layout">
         <div>
           <h3 style="color: var(--green-light); margin-bottom: 1rem; font-size: 0.95rem;">YouTube Feed</h3>
+          
+          <div class="media-controls-bar">
+            <div class="media-search-wrap">
+              <input type="text" id="media-search" class="media-search-input" placeholder="Search videos by title..." autocomplete="off">
+            </div>
+            <div class="media-sort-wrap">
+              <select id="media-sort" class="media-sort-select">
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="az">Title (A-Z)</option>
+                <option value="za">Title (Z-A)</option>
+              </select>
+            </div>
+          </div>
+
           <div id="video-feed">
-            <!-- Populated by JS from data/videos.json; first video featured, rest in a grid -->
+            <!-- Populated by JS from data/videos.json -->
+          </div>
+
+          <div class="media-pagination" id="media-pagination" style="display: none;">
+            <!-- Rendered by JS -->
           </div>
         </div>
         <div>

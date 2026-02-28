@@ -100,7 +100,11 @@ exports.handler = async function (event) {
       const contentStr = Buffer.from(currentFileData.content, 'base64').toString('utf8');
       let videosData = JSON.parse(contentStr);
 
-      const newVideo = { id: videoId, title: videoTitle };
+      const newVideo = {
+        id: videoId,
+        title: videoTitle,
+        date: new Date().toISOString()
+      };
 
       if (videosData.videos) {
         videosData.videos.unshift(newVideo);

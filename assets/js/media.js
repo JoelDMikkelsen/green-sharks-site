@@ -285,12 +285,20 @@
           var list = (data && data.videos) ? data.videos : (Array.isArray(data) ? data : []);
 
           // Normalize items if they are just strings (IDs) instead of objects
-          allVideos = list.map(function (item, idx) {
+          var normalized = list.map(function (item, idx) {
             if (typeof item === 'string') {
               // inject a fake date decreasing from today so string arrays don't break sorting
               return { id: item, title: 'Highlight', date: new Date(Date.now() - idx * 86400000).toISOString() };
             }
             return item;
+          });
+
+          // Deduplicate by video ID (keeps first occurrence)
+          var seen = {};
+          allVideos = normalized.filter(function (v) {
+            if (!v.id || seen[v.id]) return false;
+            seen[v.id] = true;
+            return true;
           });
 
           // Sort by newest initially just in case array in json isn't perfectly sorted
